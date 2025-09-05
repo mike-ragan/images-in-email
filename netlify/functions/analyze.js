@@ -1,5 +1,5 @@
 const axios = require('axios');
-const sizeOf = require('image-size');
+const { imageSize } = require('image-size');
 
 exports.handler = async (event, context) => {
     // Set CORS headers
@@ -106,7 +106,7 @@ exports.handler = async (event, context) => {
         httpStatus = imageResponse.status;
         headers = imageResponse.headers;
         // Use image-size to get dimensions
-        dimensions = sizeOf(Buffer.from(imageResponse.data));
+        dimensions = imageSize(Buffer.from(imageResponse.data));
     } catch (imgErr) {
         errorMsg = imgErr.message;
         errorStack = imgErr.stack;
