@@ -326,7 +326,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Latest Image Parameter Verifier</h1>
+            <h1>Image Parameter Verifier</h1>
             <p>Analyze images for Gmail carousel compatibility and email template optimization</p>
         </div>
 
@@ -389,34 +389,43 @@
         function showSimpleResults(data) {
             const resultsDiv = document.getElementById('results');
             
-            resultsDiv.innerHTML = `
-                <h3>✅ Basic Connectivity Test Results</h3>
-                <div class="result-grid">
-                    <div class="result-item">
-                        <div class="result-value">${data.url}</div>
-                        <div class="result-label">URL</div>
-                    </div>
-                    <div class="result-item">
-                        <div class="result-value">${data.contentType || 'Unknown'}</div>
-                        <div class="result-label">Content Type</div>
-                    </div>
-                    <div class="result-item">
-                        <div class="result-value">${data.fileSizeKB ? data.fileSizeKB + ' KB' : 'Unknown'}</div>
-                        <div class="result-label">File Size</div>
-                    </div>
-                    <div class="result-item">
-                        <div class="result-value">${data.httpStatus}</div>
-                        <div class="result-label">HTTP Status</div>
-                    </div>
-                </div>
-                <div style="margin-top: 20px; padding: 15px; background: #e6f3ff; border-radius: 8px; border-left: 4px solid #2196F3;">
-                    <h4>ℹ️ ${data.message}</h4>
-                    <p>${data.note}</p>
-                </div>
-                ${data.url ? `<div class="image-preview">
-                    <img src="${data.url}" alt="Image preview" class="preview-img" loading="lazy">
-                </div>` : ''}
-            `;
+    // Calculate aspect ratio if possible
+    let aspectRatio = '';
+    if (data.width && data.height) {
+        const ratio = (data.width / data.height).toFixed(2);
+        aspectRatio = `${data.width} : ${data.height} (${ratio}:1)`;
+    } else {
+        aspectRatio = 'Unknown';
+    }
+
+    resultsDiv.innerHTML = `
+        <h3>🖼️ Image Analysis Results</h3>
+        <div class="result-grid">
+            <div class="result-item">
+                <div class="result-value">${data.width && data.height ? data.width + ' × ' + data.height + ' px' : 'Unknown'}</div>
+                <div class="result-label">Image Size (px)</div>
+            </div>
+            <div class="result-item">
+                <div class="result-value">${aspectRatio}</div>
+                <div class="result-label">Aspect Ratio</div>
+            </div>
+            <div class="result-item">
+                <div class="result-value">${data.contentType || 'Unknown'}</div>
+                <div class="result-label">Content Type</div>
+            </div>
+            <div class="result-item">
+                <div class="result-value">${data.fileSizeKB ? data.fileSizeKB + ' KB' : 'Unknown'}</div>
+                <div class="result-label">File Size</div>
+            </div>
+        </div>
+        <div style="margin-top: 20px; padding: 15px; background: #e6f3ff; border-radius: 8px; border-left: 4px solid #2196F3;">
+            <h4>ℹ️ ${data.message}</h4>
+            <p>${data.note || ''}</p>
+        </div>
+        ${data.url ? `<div class="image-preview">
+            <img src="${data.url}" alt="Image preview" class="preview-img" loading="lazy">
+        </div>` : ''}
+    `;
             
             resultsDiv.className = 'results success';
             resultsDiv.classList.remove('hidden');
