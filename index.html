@@ -389,14 +389,26 @@
         function showSimpleResults(data) {
             const resultsDiv = document.getElementById('results');
             
-    // Calculate aspect ratio if possible
+    // Calculate aspect ratio and check criteria
     let aspectRatio = '';
+    let aspectValid = false;
+    let minWidth = 0;
+    let minHeight = 0;
+    let aspectLabel = 'Unknown';
+    let ratio = null;
     if (data.width && data.height) {
-        const ratio = (data.width / data.height).toFixed(2);
+        ratio = (data.width / data.height).toFixed(2);
         aspectRatio = `${data.width} : ${data.height} (${ratio}:1)`;
-    } else {
-        aspectRatio = 'Unknown';
+        // Supported aspect ratios
+        if (Math.abs(ratio - 1.00) < 0.02) { aspectValid = true; minWidth = 300; minHeight = 300; aspectLabel = '1:1'; }
+        else if (Math.abs(ratio - 1.91) < 0.02) { aspectValid = true; minWidth = 600; minHeight = 314; aspectLabel = '1.91:1'; }
+        else if (Math.abs(ratio - 0.8) < 0.02) { aspectValid = true; minWidth = 480; minHeight = 600; aspectLabel = '4:5'; }
     }
+    // Check all criteria
+    const isHttps = data.url && data.url.startsWith('https:');
+    const isSizeValid = data.fileSizeKB && data.fileSizeKB < 500;
+    const isDimValid = aspectValid && data.width >= minWidth && data.height >= minHeight;
+    const isSuitable = isHttps && isSizeValid && isDimValid;
 
     resultsDiv.innerHTML = `
         <h3>🖼️ Image Analysis Results</h3>
@@ -419,7 +431,13 @@
             </div>
         </div>
         <div style="margin-top: 20px; padding: 15px; background: #e6f3ff; border-radius: 8px; border-left: 4px solid #2196F3;">
-            <h4>ℹ️ ${data.message}</h4>
+            <h4>ℹ️ ${isSuitable ? 'Image is suitable for Gmail promo carousel' : 'Image does not meet all Gmail carousel requirements'}</h4>
+            <ul style="margin-top:10px; font-size:0.95em;">
+                <li>Aspect ratio: <strong>${aspectLabel}</strong> ${aspectValid ? '✅' : '❌'}</li>
+                <li>Minimum size: <strong>${minWidth} × ${minHeight}</strong> ${isDimValid ? '✅' : '❌'}</li>
+                <li>File size < 500 KB: <strong>${data.fileSizeKB ? data.fileSizeKB + ' KB' : 'Unknown'}</strong> ${isSizeValid ? '✅' : '❌'}</li>
+                <li>HTTPS: <strong>${isHttps ? 'Yes' : 'No'}</strong> ${isHttps ? '✅' : '❌'}</li>
+            </ul>
             <p>${data.note || ''}</p>
         </div>
         ${data.url ? `<div class="image-preview">
