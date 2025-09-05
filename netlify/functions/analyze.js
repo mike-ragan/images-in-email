@@ -85,24 +85,27 @@ exports.handler = async (event, context) => {
         const contentLength = response.headers['content-length'];
         const contentType = response.headers['content-type'];
         
-            let imageResponse;
-            let dimensions = null;
-            let errorMsg = null;
-            try {
-                // Download the image as arraybuffer
-                imageResponse = await axios.get(url, {
-                    responseType: 'arraybuffer',
-                    timeout: 15000,
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (compatible; ImageVerifier/1.0)',
-                    },
-                });
-                // Use image-size to get dimensions
-                const sizeOf = require('image-size');
-                dimensions = sizeOf(imageResponse.data);
-            } catch (imgErr) {
-                errorMsg = imgErr.message;
-            }
+    let imageResponse;
+let dimensions = null;
+let errorMsg = null;
+let errorStack = null; // Add this line
+try {
+    // Download the image as arraybuffer
+    imageResponse = await axios.get(url, {
+        responseType: 'arraybuffer',
+        timeout: 15000,
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; ImageVerifier/1.0)',
+        },
+    });
+    // Use image-size to get dimensions
+    const sizeOf = require('image-size');
+    dimensions = sizeOf(imageResponse.data);
+} catch (imgErr) {
+    errorMsg = imgErr.message;
+    errorStack = imgErr.stack; // Add this line
+    console.error('Image analysis error:', imgErr); // Add this line
+}
 
             const result = {
                 url: url,
@@ -115,6 +118,7 @@ exports.handler = async (event, context) => {
                 type: dimensions ? dimensions.type : null,
                 message: dimensions ? 'Image analysis successful.' : 'Could not analyze image.',
                 note: dimensions ? undefined : errorMsg,
+                errorStack: dimensions ? undefined : errorStack,
                 httpStatus: httpStatus,
                 headers: headers
             };
