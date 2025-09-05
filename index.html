@@ -327,7 +327,7 @@
     <div class="container">
         <div class="header">
             <h1>Image Parameter Verifier</h1>
-            <p>Analyze images for Gmail carousel compatibility and email template optimization</p>
+            <!--<p>Analyze images for Gmail carousel compatibility and email template optimization</p>-->
         </div>
 
         <div class="tool-section">
@@ -432,7 +432,7 @@
         </div>
         <div style="margin-top: 20px; padding: 15px; background: #e6f3ff; border-radius: 8px; border-left: 4px solid #2196F3;">
             <h4>ℹ️ ${isSuitable ? 'Image is suitable for Gmail promo carousel' : 'Image does not meet all Gmail carousel requirements'}</h4>
-            <ul style="margin-top:10px; font-size:0.95em;">
+            <ul style="margin-top:10px; font-size:0.95em; margin-left: 2.2em;">
                 <li>Aspect ratio: <strong>${aspectLabel}</strong> ${aspectValid ? '✅' : '❌'}</li>
                 <li>Minimum size: <strong>${minWidth} × ${minHeight}</strong> ${isDimValid ? '✅' : '❌'}</li>
                 <li>File size < 500 KB: <strong>${data.fileSizeKB ? data.fileSizeKB + ' KB' : 'Unknown'}</strong> ${isSizeValid ? '✅' : '❌'}</li>
