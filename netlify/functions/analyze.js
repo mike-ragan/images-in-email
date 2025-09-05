@@ -1,4 +1,5 @@
 const axios = require('axios');
+const sizeOf = require('image-size');
 
 exports.handler = async (event, context) => {
     // Set CORS headers
@@ -86,26 +87,31 @@ exports.handler = async (event, context) => {
         const contentType = response.headers['content-type'];
         
     let imageResponse;
-let dimensions = null;
-let errorMsg = null;
-let errorStack = null; // Add this line
-try {
-    // Download the image as arraybuffer
-    imageResponse = await axios.get(url, {
-        responseType: 'arraybuffer',
-        timeout: 15000,
-        headers: {
-            'User-Agent': 'Mozilla/5.0 (compatible; ImageVerifier/1.0)',
-        },
-    });
-    // Use image-size to get dimensions
-    const sizeOf = require('image-size');
-    dimensions = sizeOf(imageResponse.data);
-} catch (imgErr) {
-    errorMsg = imgErr.message;
-    errorStack = imgErr.stack; // Add this line
-    console.error('Image analysis error:', imgErr); // Add this line
-}
+    let dimensions = null;
+    let errorMsg = null;
+    let errorStack = null;
+    let fileSize = null;
+    let httpStatus = null;
+    let headers = null;
+    try {
+        // Download the image as arraybuffer
+        imageResponse = await axios.get(url, {
+            responseType: 'arraybuffer',
+            timeout: 15000,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (compatible; ImageVerifier/1.0)',
+            },
+        });
+        fileSize = imageResponse.headers['content-length'] ? parseInt(imageResponse.headers['content-length']) : imageResponse.data.length;
+        httpStatus = imageResponse.status;
+        headers = imageResponse.headers;
+        // Use image-size to get dimensions
+        dimensions = sizeOf(Buffer.from(imageResponse.data));
+    } catch (imgErr) {
+        errorMsg = imgErr.message;
+        errorStack = imgErr.stack;
+        console.error('Image analysis error:', imgErr);
+    }
 
             const result = {
                 url: url,
