@@ -17,13 +17,7 @@ netlify-deploy/
 
 ## 🚀 Quick Deployment to Netlify
 
-### Method 1: Drag & Drop (Recommended)
-1. **Zip this entire `netlify-deploy` folder**
-2. Go to [netlify.com](https://netlify.com) and log in
-3. **Drag the zip file** onto the deployment area
-4. Netlify will automatically build and deploy
-
-### Method 2: Netlify CLI
+### Method 1: Netlify CLI
 ```bash
 # Install Netlify CLI globally
 npm install -g netlify-cli
@@ -33,7 +27,7 @@ cd netlify-deploy
 netlify deploy --prod
 ```
 
-### Method 3: GitHub Integration
+### Method 2: GitHub Integration
 1. Push this `netlify-deploy` folder to a GitHub repository
 2. Connect the repository to Netlify
 3. Set build directory to root (`/`)
@@ -54,11 +48,6 @@ netlify deploy --prod
 - ❌ Alternative deployment files
 
 ## 🎯 After Deployment
-
-Once deployed, test with the Expedia CDN image:
-```
-https://image.eg.expedia.com/lib/fe3211727364047c721775/m/1/carousel-image-3v3.jpg
-```
 
 The serverless function will provide complete file size analysis that bypasses all CORS restrictions.
 
