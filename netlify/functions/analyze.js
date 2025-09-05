@@ -106,7 +106,15 @@ exports.handler = async (event, context) => {
         httpStatus = imageResponse.status;
         headers = imageResponse.headers;
         // Use image-size to get dimensions
-        dimensions = imageSize(Buffer.from(imageResponse.data));
+        try {
+            dimensions = imageSize(Buffer.from(imageResponse.data));
+            console.log('Image dimensions:', dimensions);
+        } catch (dimErr) {
+            errorMsg = 'imageSize failed: ' + dimErr.message;
+            errorStack = dimErr.stack;
+            console.error('imageSize error:', dimErr);
+            dimensions = null;
+        }
     } catch (imgErr) {
         errorMsg = imgErr.message;
         errorStack = imgErr.stack;
