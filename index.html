@@ -34,7 +34,7 @@
             text-align: center;
             margin-bottom: 30px;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #38b2ac 0%, #ff9800 100%);
             color: white;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -77,6 +77,7 @@
             border-radius: 8px;
             font-size: 16px;
             transition: border-color 0.3s ease;
+            font-family: Menlo, Monaco, 'Courier New', monospace;
         }
 
         input[type="url"]:focus {
@@ -102,7 +103,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #38b2ac 0%, #ff9800 100%);
             color: white;
         }
 
@@ -360,7 +361,7 @@
     </div>
 
     <div class="footer">
-        Made with 💙 2025 • Powered by Netlify
+        <a href="" target="_blank" style="color: #38b2ac; text-decoration: underline;">About this project</a>
     </div>
 
     <script>
@@ -419,7 +420,7 @@
 
     resultsDiv.innerHTML = `
         <h3>🖼️ Image Analysis Results</h3>
-        <div class="result-grid">
+        <div class="result-grid" style="grid-template-columns: repeat(2, 1fr);">
             <div class="result-item">
                 <div class="result-value">${data.width && data.height ? data.width + ' × ' + data.height + ' px' : 'Unknown'}</div>
                 <div class="result-label">Image Size (px)</div>
@@ -439,7 +440,7 @@
         </div>
         <div style="margin-top: 20px; padding: 15px; background: #e6f3ff; border-radius: 8px; border-left: 4px solid #2196F3;">
             <h4>ℹ️ ${isSuitable ? 'Image is suitable for Gmail promo carousel' : 'Image does not meet all Gmail carousel requirements'}</h4>
-            <ul style="margin-top:10px; font-size:0.95em; margin-left: 2.2em;">
+            <ul style="margin-top:10px; font-size:0.95em; margin-left: 2em;">
                 <li>Aspect ratio: <strong>${aspectLabel}</strong> ${aspectValid ? '✅' : '❌'}</li>
                 <li>Minimum size: <strong>${minWidth} × ${minHeight}</strong> ${isDimValid ? '✅' : '❌'}</li>
                 <li>File size < 500 KB: <strong>${data.fileSizeKB ? data.fileSizeKB + ' KB' : 'Unknown'}</strong> ${isSizeValid ? '✅' : '❌'}</li>
